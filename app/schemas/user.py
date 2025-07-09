@@ -1,36 +1,56 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, Field, validator
 from typing import Optional
+from datetime import datetime
 
 class UserCreate(BaseModel):
-    first_name: str
-    last_name: str
+    firstName: str
+    lastName: str
     email: str
     phone: str
     password: str
-    confirm_password: str
-    role: str
+    confirmPassword: str
+    role: int
+    preschoolId: Optional[int]
+    qualification: Optional[str]
 
-    @validator('role')
-    def validate_role(cls, v):
-        allowed = ['admin', 'Teacher', 'Prantes']
-        if v not in allowed:
-            raise ValueError(f'role must be one of {allowed}')
+    @validator("confirmPassword")
+    def passwords_match(cls, v, values):
+        if "password" in values and v != values["password"]:
+            raise ValueError("Passwords do not match")
         return v
+
+    class Config:
+        allow_population_by_field_name = True
+        from_attributes = True
 
 class UserOut(BaseModel):
     id: int
-    first_name: str
-    last_name: str
+    firstName: str
+    lastName: str
     email: str
     phone: str
-    role: str  # <-- Add this line
+    role: int
+    preschoolId: Optional[int]
+    qualification: Optional[str]
 
     class Config:
         orm_mode = True
+        allow_population_by_field_name = True
+        by_alias = True
+        from_attributes = True
 
 class UserUpdate(BaseModel):
-    first_name: Optional[str]
-    last_name: Optional[str]
+    firstName: Optional[str]
+    lastName: Optional[str]
     email: Optional[str]
     phone: Optional[str]
     password: Optional[str]
+    role: Optional[int]
+    preschoolId: Optional[int]
+    child_name: Optional[str]
+    child_age: Optional[int]
+    otp: Optional[str]
+    otp_expiry: Optional[datetime]
+    class_id: Optional[int]
+    division_id: Optional[int]
+    qualification: Optional[str]
