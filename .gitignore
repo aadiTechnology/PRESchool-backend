@@ -1,0 +1,28 @@
+# Python virtual environment
+venv/
+VENV/
+.env/
+.venv/
+ENV/
+env/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+__pycache__
+
+# VS Code settings
+.vscode/
+
+# Pytest cache
+.pytest_cache/
+
+# Environment variables
+# *.env
+
+# OS files
+.DS_Store
+Thumbs.db
+uploads

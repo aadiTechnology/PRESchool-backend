@@ -1,0 +1,9 @@
+fastapi
+sqlalchemy
+pydantic-settings
+passlib[bcrypt]
+python-jose[cryptography]
+pyodbc
+alembic
+uvicorn
+bcrypt==4.0.1
