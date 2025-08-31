@@ -1,22 +1,24 @@
-
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
--- Drop constraints first (if exist)
-IF OBJECT_ID('dbo.FK_users_classes', 'F') IS NOT NULL
-    ALTER TABLE dbo.users DROP CONSTRAINT FK_users_classes;
-
-IF OBJECT_ID('dbo.FK_users_divisions', 'F') IS NOT NULL
-    ALTER TABLE dbo.users DROP CONSTRAINT FK_users_divisions;
-
--- Drop the table if it already exists
 IF OBJECT_ID('dbo.users', 'U') IS NOT NULL
     DROP TABLE dbo.users;
 GO
 
--- Recreate the table
+IF OBJECT_ID('dbo.roles', 'U') IS NOT NULL
+    DROP TABLE dbo.roles;
+GO
+
+CREATE TABLE [dbo].[roles](
+    [id] [int] IDENTITY(1,1) NOT NULL,
+    [name] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED ([id] ASC),
+UNIQUE NONCLUSTERED ([name] ASC)
+);
+GO
+
 CREATE TABLE [dbo].[users](
     [id] [int] IDENTITY(1,1) NOT NULL,
     [firstName] [nvarchar](50) NULL,
@@ -25,32 +27,9 @@ CREATE TABLE [dbo].[users](
     [phone] [nvarchar](20) NULL,
     [hashedPassword] [nvarchar](255) NULL,
     [password] [nvarchar](255) NULL,
-    [role] [int] NULL,
-    [preschoolId] [int] NULL,
-    [childName] [nvarchar](255) NULL,
-    [childAge] [int] NULL,
-    [otp] [varchar](10) NULL,
-    [otpExpiry] [datetime] NULL,
-    [classId] [int] NULL,
-    [divisionId] [int] NULL,
-    [qualification] [varchar](255) NULL,
+    [role_id] [int] NOT NULL,
 PRIMARY KEY CLUSTERED ([id] ASC),
-UNIQUE NONCLUSTERED ([email] ASC)
+UNIQUE NONCLUSTERED ([email] ASC),
+FOREIGN KEY ([role_id]) REFERENCES [dbo].[roles]([id])
 );
-GO
-
--- Add foreign keys only if parent tables exist
-IF OBJECT_ID('dbo.classes', 'U') IS NOT NULL
-BEGIN
-    ALTER TABLE [dbo].[users]  WITH CHECK ADD CONSTRAINT [FK_users_classes] 
-    FOREIGN KEY([classId]) REFERENCES [dbo].[classes] ([id]);
-    ALTER TABLE [dbo].[users] CHECK CONSTRAINT [FK_users_classes];
-END
-
-IF OBJECT_ID('dbo.divisions', 'U') IS NOT NULL
-BEGIN
-    ALTER TABLE [dbo].[users]  WITH CHECK ADD CONSTRAINT [FK_users_divisions] 
-    FOREIGN KEY([divisionId]) REFERENCES [dbo].[divisions] ([id]);
-    ALTER TABLE [dbo].[users] CHECK CONSTRAINT [FK_users_divisions];
-END
 GO

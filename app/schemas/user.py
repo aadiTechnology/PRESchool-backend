@@ -9,9 +9,7 @@ class UserCreate(BaseModel):
     phone: str
     password: str
     confirmPassword: str
-    role: int
-    preschoolId: Optional[int]
-    qualification: Optional[str]
+    role_id: int
 
     @validator("confirmPassword")
     def passwords_match(cls, v, values):
@@ -29,9 +27,7 @@ class UserOut(BaseModel):
     lastName: str
     email: str
     phone: str
-    role: int
-    preschoolId: Optional[int]
-    qualification: Optional[str]
+    role_id: int
 
     class Config:
         orm_mode = True
@@ -40,17 +36,8 @@ class UserOut(BaseModel):
         from_attributes = True
 
 class UserUpdate(BaseModel):
-    firstName: Optional[str]
-    lastName: Optional[str]
-    email: Optional[str]
-    phone: Optional[str]
-    password: Optional[str]
-    role: Optional[int]
-    preschoolId: Optional[int]
-    child_name: Optional[str]
-    child_age: Optional[int]
-    otp: Optional[str]
-    otp_expiry: Optional[datetime]
-    class_id: Optional[int]
-    division_id: Optional[int]
-    qualification: Optional[str]
+    firstName: str = None
+    lastName: str = None
+    email: str = None
+    phone: str = None
+    password: str = None
