@@ -17,13 +17,13 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
     if not user or not verify_password(request.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    access_token = create_access_token(data={"sub": user.email, "role": user.role})
+    access_token = create_access_token(data={"sub": user.email, "role": user.role.name if user.role else None})
     return {
         "access_token": access_token,
         "token_type": "bearer",
         "user": {
             "email": user.email,
-            "role": user.role,
+            "role": user.role.name if user.role else None,
             # add any other fields you want to expose
         }
     }
